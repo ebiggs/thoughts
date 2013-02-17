@@ -6,7 +6,8 @@ Monad the Ultimate!
 Fans of functional programing have long held [lambda to be The Ultimate](http://lambda-the-ultimate.org). They were
 right about lambda being the ultimate for computation. But they were wrong about it being the ultimate for computers.
 This is because computers do more than compute. They also are instruments. A great example of how a computer is
-an instrument is that it has a screen and a keyboard and mouse or touchscreen that humans use to interact with them.
+an instrument is that it has a screen and a keyboard and mouse or touchscreen that humans use to interact with them, and 
+they have wires and wireless networking capabilities so that they can interact with eachother ad hoc.
 So they do a whole heck of a lot of computing, but they do more. And so lambda is almost the ultimate, but not quite.
 Something else is, and that something, my friends, is The Monad!
 
