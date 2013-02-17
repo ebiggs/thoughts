@@ -72,3 +72,55 @@ Int clockPlus(Int a, Int b) = modulo12(+(a,b))
 Now we can really see some serious composition taking place! We're revealing the true structure of our program in
 terms of functions, and remember functions are the fundamentally good idea when it comes to reasoning about computation.
 
+Beautiful things happen when you think of functions as data.
+
+So revealed how formulas are function composition using typical c-ish notation. But the full beauty of how this all fits
+together can't really be enjoyed until we start thinking of functions as data. Let's do this be saying a function has
+a type:
+
+class Function { Int apply(param: Int) = ... }
+
+Function f = ...
+
+When you think of types as classes this is what you get, a class that can be instantiated and passed around as on
+object that has one method named apply. That's applied just how functions are. This is a horrible amount of indirection
+So let's just chaneg are syntax and think of a function type as
+
+f: Int -> Int
+
+There we've distilled it down to its essence! And from now on let's put all of our type annotations after instead of
+before our values. This is just a syntactic difference, no big deal.
+
+Now that functions are just data, we can actually write a function to compose functions, let's call this function 'o'
+
+o(f: (Int -> Int), g: (Int -> Int)): (Int -> Int) = h(x: Int): Int = f(g(x)) 
+
+o is a function that takes f and g and returns some h, its composition.
+f: Int -> Int
+g: Int -> Int
+h: Int -> Int, such that h is (f o g) i.e. f composing g i.e. f(g(x)) for some x
+
+Not that o not only takes two functions but it returns one so  (f o g)(5) could be seen as compose thes funcions and invoke. 
+
+We'll call x a point. Which is itself a little noisy. In functional programming we clean things up even more
+by getting rid of these points. But before that we need to understand that when we start to think of functions as data
+that functions really only ever need one argument. What? But we've already seen several functions that have two arguments
+like +, %, and even o, our function composition function. Ok well bare with me for a second as we look at +
+
+\+(a: Itn, b: Int) doesn't look much different than +(a: Int)(b: Int)
+
+By grouping +'s parameters like this and ignore +'s implementation we see that we can think of + as taking an int
+and returning a function that takes and int and returns an int. This is juts like before with 'o' which returned
+a function... so remember our example invocation of (f o g)(5)? We'd just invoke + similarly, i.e. +(3)(4). Even the
+parens become superfluous at this point, because we're just chaining single argument function invocations together:
+\+ 3 4
+
+Now we can change a pointed function definition to a point free definition, we no longer need that point x.
+
+pointed:
+
+plus3(x: Int): Int -> Int = +(3)(x)
+
+unpointed:
+
+plus3 = + 3 (remember, + 3 returns a function!)
