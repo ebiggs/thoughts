@@ -166,7 +166,7 @@ of keeping track of time, and money. It sort of tries to find algebraic patterns
 Interesting that in clock math zero is 12. For that reason it can be less confusing to call 0/12 the identity element. i.e.
 a + identity is a and identity + a is a. It's the thing that does nothing under the operation.
 
-Another neat algebraic pattern is the existence of inverse elements. we call a' the inverse of a, and say that
++ Existence of inverses - Another neat algebraic pattern is the existence of inverse elements. we call a' the inverse of a, and say that
 (a + a') == (a' + a) == identity
 
 + in arithmatic: (-3 + 3) == (3 + -3) == 0
