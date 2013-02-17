@@ -96,9 +96,9 @@ Now that functions are just data, we can actually write a function to compose fu
 o(f: (Int -> Int), g: (Int -> Int)): (Int -> Int) = h(x: Int): Int = f(g(x)) 
 
 o is a function that takes f and g and returns some h, its composition.
-f: Int -> Int
-g: Int -> Int
-h: Int -> Int, such that h is (f o g) i.e. f composing g i.e. f(g(x)) for some x
++ f: Int -> Int
++ g: Int -> Int
++ h: Int -> Int, such that h is (f o g) i.e. f composing g i.e. f(g(x)) for some x
 
 Not that o not only takes two functions but it returns one so  (f o g)(5) could be seen as compose thes funcions and invoke. 
 
@@ -124,3 +124,106 @@ plus3(x: Int): Int -> Int = +(3)(x)
 unpointed:
 
 plus3 = + 3 (remember, + 3 returns a function!)
+
+At this point this synergy between thinking about function parameters either as multiple parameters, or a chain of
+one argument function calls ought to start working in your favor, given the context. This trivial transformation between
+the two ways of thinking can be called currying. I like to curry my functions and my potatos, both are pretty tasty.
+
+Let's go back to our clock arithmetic and try to designate a point free version.
++ recall our ponited version: clockPlus(a, b) = %(+(a, b), 12)
+
+We have an impediment, the second, not the first, argument of our modulo operator is to be partially applied. Functions as
+data to the rescue! Simply imagine a function that takes a function and returns that function but with its two parameters
+flipped, we'll call it flip! flip(f) = (g(x,y) = f(y,x)) <- this isn't code in any language it's trying to express the
+idea, but it can easily be translated to code in any functional language.
+
+So our point free definition becomes:
++clockPlus = o (flip % 12) (+) //remember 'o' is our operator that composes two functions
+
+clockplus is the composition of + with a flipped modulo partially applied with 12.
+
+Note that points aren't evil. They're perfectly nice. Some things are nice to read with points, other things
+get at the crux of the matter better by trying to eliminate the points. Your taste and style will tell you
+when points are appropriate. Remember when even functions can be values even functions can be points. One rather
+interesting, and surprising, and in my opinion, mindblowing thing is you can do point-free recursion! That's right,
+you can call a function from inside that function without ever giving that function a name. It's a crazy curiosity,
+You can google 'y-combinator' for the most famous example of this.
+
+Awesome! So in conclusion we've explored 2 important things: An introduction to functional programming idioms/vocab and an
+insight that pure computational programming is all about functional composition, and not much else. (Again we have
+the important note that computers do a whole lot of computation but they do more than that.)
+
+Just a tiny bit of abstract algebra, no big deal!
+=================================================
+
+Abstract algebra is a pretty cool bit of mathematics that everyone has some level of familiarity with just by virtue
+of keeping track of time, and money. It sort of tries to find algebraic patterns in things. For example:
+
++commutativity: a + b == b + a  //true in both clock math (modulo 12) and regular arithmatic.
++associativity: a + (b + c) == (a + b) + c //again true in both clock math and regular arithmatic.
++existence of zero: (regular arithmatic: a == (0 + a) == (a + 0)), (clock math: a == (12 + a) == (a + 12))
+
+Interesting that in clock math zero is 12. For that reason it can be less confusing to call 0/12 the identity element. i.e.
+a + identity is a and identity + a is a. It's the thing that does nothing under the operation.
+
+Another neat algebraic pattern is the existence of inverse elements. we call a' the inverse of a, and say that
+(a + a') == (a' + a) == identity
+
++in arithmatic: (-3 + 3) == (3 + -3) == 0
++in clock math: (8 + 4) == (4 + 8) == 12
+
+When all these things hold we call what we're looking at an abelian group. When all hold except for commutativity, we call
+it a group. When we ditch the existence of inverse elements for every element we have a monoid. Finally, we can even ditch
+identity, in which case we have a semigroup.
+
+"abelian group," "group," "monoid," and "semigroup" are labels we can all apply to our arithmatic and our clock math because
+all of our laws hold. But let's look at functions instead of numbers, and function composition instead of addition. We do
+this because, as we've already established, function composition is the key to computation. First let's stop writing
+Int, since this applies to functions that operate on any data, instead we'll write T for type.
+
+let f, g and h be functions from T to T and * be function composition:
++ f: T -> T
++ g: T -> T
++ h: T -> T
++ *: (T -> T) -> (T -> T) -> (T -> T) => *(f, g) = x -> f(g(x)) //do g, then pass its result to f
+
+*, like +, is a binary operator and we'll write in infix accordingly, i.e. f * g
+
+Intuitively we sort of know that commutativity doesn't hold for *, but associativity does. Proving this is fairly
+straight forward, but more math then we need to get into.
+
+So we know that commutativity is gone, so we're not dealing with an abelian group.
+
+What about identity? How about the function that does nothing to its input? i.e. id(x)=x, that seems like a good candidate
+for identity.
+
++ id * f == id(f) == f
++ f * id == f(id) == f
+
+Ok, cool, so we're dealing with more than a semigroup. We have either a monoid or a group.
+
+Identity function is probably starting to sound familiar from algebra, and so too, is the idea of a function's inverse..
+let f(x) = x + 3, and g(x) = x - 3, f(g(x)) = g(f(x)) = id(x) = x. You may recall that some functions have inverses
+but others don't. the constant function f(x) = 3, for example is not invertible.
+
+So the answer is that for function composition we have a group on the set of invertable functions and a monoid on the set
+of all functions.
+
+Why does this matter? Well we have mathematical truth and beauty built into composing computation. Monoids have
+been extensively studied, and are an interesting thing. The also are things we already intuitively know that
+we've formalized behind a more theoretical framework. This is nice because now we're fairly close to being able
+to do the same thing with a Monad without it getting too scary, since this is just stuff you're already somewhat
+familiar with.
+
+One note about Category theory. Turns out you don't really need to worry about category theory unless you write compilers.
+As a programmer you just do what you've always done, make sure your types match up. What I mean by that, is that
+category theory comes into play once we start dealing with functions from one type to another.
+
++ f: B -> C
++ g: A -> B
++ h: A -> C, let h = f * g
+
+We know that the output of g's type must match the input of f's type, as long as that's the case we can go ahead and
+compose as we normally would when only dealing with functions on one type. That's all you need to worry about, just know
+that mathemtacially we have to be more sophisticated than introductory abstract algebra, and enter the theory of categories.
+
