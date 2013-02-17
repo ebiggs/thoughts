@@ -48,3 +48,27 @@ Haskell, an otherwise "pure" "lambda" type of language, to do more than just com
 world of computers as an instrument into the world where lambda is the ultimate way of thinking about computation. They
 are the grand unifying theory that can and probably will bring together the two schools in a post-divided world. The
 future will not be divided. It will be a Turing/Church world with the Monad being the grand unifying theory.
+
+Computing is all about function composition
+===========================================
+
+Let's write a function called clockplus, the formula is bascially:
+
+Int clockplus(Int a, Int b) = (a + b) % 12
+
+It doesn't take long to realize that hidden among this formula is function composition. The operators + and % are
+really just functions, after all, right? So it becomes obvious we're dealing with composition when we write + and %
+like we do functions rather than in infix operator notation:
+
+Int clockPlus(Int a, Int b) = %(+(a, b), 12)
+
+There's a little bit of funniness going on with our composition. We're not strictly composing % and +, we're, in fact
+composing % partially applied with +. That "partial application" can be named modulo12. What do i man by this? 
+Well, function composition is cleanest when we think of a function that only take one input.
+
+Int modulo12(Int n) = %(n, 12)
+Int clockPlus(Int a, Int b) = modulo12(+(a,b))
+
+Now we can really see some serious composition taking place! We're revealing the true structure of our program in
+terms of functions, and remember functions are the fundamentally good idea when it comes to reasoning about computation.
+
