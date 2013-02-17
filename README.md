@@ -159,9 +159,9 @@ Just a tiny bit of abstract algebra, no big deal!
 Abstract algebra is a pretty cool bit of mathematics that everyone has some level of familiarity with just by virtue
 of keeping track of time, and money. It sort of tries to find algebraic patterns in things. For example:
 
-+commutativity: a + b == b + a  //true in both clock math (modulo 12) and regular arithmatic.
-+associativity: a + (b + c) == (a + b) + c //again true in both clock math and regular arithmatic.
-+existence of zero: (regular arithmatic: a == (0 + a) == (a + 0)), (clock math: a == (12 + a) == (a + 12))
++ commutativity: a + b == b + a  //true in both clock math (modulo 12) and regular arithmatic.
++ associativity: a + (b + c) == (a + b) + c //again true in both clock math and regular arithmatic.
++ existence of zero: (regular arithmatic: a == (0 + a) == (a + 0)), (clock math: a == (12 + a) == (a + 12))
 
 Interesting that in clock math zero is 12. For that reason it can be less confusing to call 0/12 the identity element. i.e.
 a + identity is a and identity + a is a. It's the thing that does nothing under the operation.
@@ -169,8 +169,8 @@ a + identity is a and identity + a is a. It's the thing that does nothing under 
 Another neat algebraic pattern is the existence of inverse elements. we call a' the inverse of a, and say that
 (a + a') == (a' + a) == identity
 
-+in arithmatic: (-3 + 3) == (3 + -3) == 0
-+in clock math: (8 + 4) == (4 + 8) == 12
++ in arithmatic: (-3 + 3) == (3 + -3) == 0
++ in clock math: (8 + 4) == (4 + 8) == 12
 
 When all these things hold we call what we're looking at an abelian group. When all hold except for commutativity, we call
 it a group. When we ditch the existence of inverse elements for every element we have a monoid. Finally, we can even ditch
