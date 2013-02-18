@@ -102,34 +102,34 @@ f: Int -> Int
 There we've distilled it down to its essence! And from now on let's put all of our type annotations after instead of
 before our values. This is just a syntactic difference, no big deal. We're making use of haskell-ish syntax since it does a really great job of describing functions and function types. You don't need to understand Haskell to follow along, and it might not even be working Haskell, but it's a haskel-esque pseudocode with explanation.
 
-Now that functions are just data, we can actually write a function to compose functions, let's call this function `o`
+Now that functions are just data, we can actually write a function to compose functions, let's call this function `.`
 
 ```haskell
-o :: (Int -> Int) -> (Int -> Int) -> (Int -> Int)
-o f g = \x -> f(g(x))
+. :: (Int -> Int) -> (Int -> Int) -> (Int -> Int)
+. f g = \x -> f(g(x))
 ```
 
-The first line describes the type of `o` and the second line describes its implemntation, it says `o(f, g) { return x => f(g(x)) }`. The return value is an anonymous function that takes an `x`, gives it first to `g`, and gives the result of `g(x)` to `f` and returns the result of `f` applied to that result. As you can see, when writing functions in haskell, the parameters just follow the function name separated by spaces. Not too bad, right?
+The first line describes the type of `.` and the second line describes its implemntation, it says `.(f, g) { return x => f(g(x)) }`. The return value is an anonymous function that takes an `x`, gives it first to `g`, and gives the result of `g(x)` to `f` and returns the result of `f` applied to that result. As you can see, when writing functions in haskell, the parameters just follow the function name separated by spaces. Not too bad, right?
 
-`o` is a function that takes `f` and `g` and returns some `h`, its composition.
+`.` is a function that takes `f` and `g` and returns some `h`, its composition.
 + `f: Int -> Int`
 + `g: Int -> Int`
-+ `h: Int -> Int`, such that `h` is `(f o g)` i.e. `f` composing `g` i.e. `f(g(x))` for some `x`
++ `h: Int -> Int`, such that `h` is `(f . g)` i.e. `f` composing `g` i.e. `f(g(x))` for some `x` (`.` uses infix notation).
 
-Not that o not only takes two functions but it returns one so  (f o g)(5) could be seen as compose thes funcions and invoke. 
+Note that `.` not only takes two functions but it returns one, so `(f . g)(5)` could be seen as "compose these funcions and invoke it with the argument `5`.
 
-We'll call x a point. Which is itself a little noisy. In functional programming we clean things up even more
+We'll call `x` a point. Which is itself a little noisy. In functional programming we clean things up even more
 by getting rid of these points. But before that we need to understand that when we start to think of functions as data
 that functions really only ever need one argument. What? But we've already seen several functions that have two arguments
-like +, %, and even o, our function composition function. Ok well bare with me for a second as we look at +
+like `+`, `%`, and even `.`, our function composition function. Ok, well, bare with me for a second as we look at `+.`
 
-\+(a: Itn, b: Int) doesn't look much different than +(a: Int)(b: Int)
+`+(a: Int, b: Int)` doesn't look much different than `+(a: Int)(b: Int)`
 
-By grouping +'s parameters like this and ignore +'s implementation we see that we can think of + as taking an int
-and returning a function that takes and int and returns an int. This is juts like before with 'o' which returned
-a function... so remember our example invocation of (f o g)(5)? We'd just invoke + similarly, i.e. +(3)(4). Even the
+By grouping `+`'s parameters like this and ignore `+`'s implementation we see that we can think of `+` as taking an int
+and returning a function that takes and int and returns an int. This is just like before with `.` which returned
+a function... so remember our example invocation of `(f o g)(5)`? We'd just invoke `+` similarly, i.e. `+(3)(4)`. Even the
 parens become superfluous at this point, because we're just chaining single argument function invocations together:
-\+ 3 4
+`\+ 3 4`
 
 Now we can change a pointed function definition to a point free definition, we no longer need that point x.
 
