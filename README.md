@@ -116,7 +116,7 @@ The first line describes the type of `.` and the second line describes its imple
 + `g: Int -> Int`
 + `h: Int -> Int`, such that `h` is `(f . g)` i.e. `f` composing `g` i.e. `f(g(x))` for some `x` (`.` uses infix notation).
 
-Note that `.` not only takes two functions but it returns one, so `(f . g)(5)` could be seen as "compose these funcions and invoke it with the argument `5`.
+Note that `.` not only takes two functions but it returns one, so `(f . g)(5)` could be seen as "compose these funcions and invoke it with the argument `5`."
 
 We'll call `x` a point. Which is itself a little noisy. In functional programming we clean things up even more
 by getting rid of these points. But before that we need to understand that when we start to think of functions as data
@@ -135,42 +135,47 @@ Now we can change a pointed function definition to a point free definition, we n
 
 pointed:
 
-plus3(x: Int): Int -> Int = +(3)(x)
+```java
+Int plus3(Int x) { +(3)(x) }
+```
+
+```haskell
+plus3 :: Int -> Int
+plus3 x = + 3 x
+```
 
 unpointed:
 
-plus3 = + 3 (remember, + 3 returns a function!)
+```java
+Function plus3() { +(3) }
+```
 
-At this point this synergy between thinking about function parameters either as multiple parameters, or a chain of
-one argument function calls ought to start working in your favor, given the context. This trivial transformation between
-the two ways of thinking can be called currying. I like to curry my functions and my potatos, both are pretty tasty.
+```haskell
+plus3 :: Int -> Int
+plus3 = (+ 3) -- (remember, + 3 returns a function!)
+```
+
+At this point this synergy between thinking about function parameters either as multiple parameters, or a chain of one argument function calls ought to start working in your favor, given the context. This trivial transformation between the two ways of thinking can be called currying. I like to curry my functions and my potatos, both are pretty tasty.
 
 Let's go back to our clock arithmetic and try to designate a point free version.
-+ recall our ponited version: clockPlus(a, b) = %(+(a, b), 12)
 
-We have an impediment, the second, not the first, argument of our modulo operator is to be partially applied. Functions as
-data to the rescue! Simply imagine a function that takes a function and returns that function but with its two parameters
-flipped, we'll call it flip! flip(f) = (g(x,y) = f(y,x)) <- this isn't code in any language it's trying to express the
-idea, but it can easily be translated to code in any functional language.
++ recall our pointed version: 
+  + `Int clockPlus(Int a, Int b) = %(+(a, b), 12)`
+
+We have an impediment, the second, not the first, argument of our modulo operator is to be partially applied. 'Functions as data' to the rescue! Simply imagine a function that takes a function and returns that function but with its two parameters flipped, we'll call it `flip`! `flip f  = (\x, y -> f(y, x))` .
 
 So our point free definition becomes:
-+clockPlus = o (flip % 12) (+) //remember 'o' is our operator that composes two functions
++ `clockPlus = . (flip % 12) (+) --remember . is our operator that composes two functions`
 
-clockplus is the composition of + with a flipped modulo partially applied with 12.
+`clockplus` is the composition of `+` with a flipped modulo partially applied with `12`.
 
-Note that points aren't evil. They're perfectly nice. Some things are nice to read with points, other things
-get at the crux of the matter better by trying to eliminate the points. Your taste and style will tell you
-when points are appropriate. Remember when even functions can be values even functions can be points. One rather
-interesting, and surprising, and in my opinion, mindblowing thing is you can do point-free recursion! That's right,
-you can call a function from inside that function without ever giving that function a name. It's a crazy curiosity,
-You can google 'y-combinator' for the most famous example of this.
+Note that points aren't evil. They're perfectly nice. Some things are nice to read with points, other things get at the crux of the matter better by trying to eliminate the points. Your taste and style will tell you when points are appropriate. Remember when even functions can be values even functions can be points. One rather interesting, and surprising, and in my opinion, mindblowing thing is you can do point-free recursion! That's right, you can call a function from inside that function without ever giving that function a name. It's a crazy curiosity, I suggest you check out [the 'y-combinator'](http://en.wikipedia.org/wiki/Y-combinator#Y_combinator) for the most well-known example of this.
 
 Awesome! So in conclusion we've explored 2 important things: An introduction to functional programming idioms/vocab and an
 insight that pure computational programming is all about functional composition, and not much else. (Again we have
 the important note that computers do a whole lot of computation but they do more than that.)
 
-Just a tiny bit of abstract algebra, no big deal!
-=================================================
+###Just a tiny bit of abstract algebra, no big deal!
 
 Abstract algebra is a pretty cool bit of mathematics that everyone has some level of familiarity with just by virtue
 of keeping track of time, and money. It sort of tries to find algebraic patterns in things. For example:
